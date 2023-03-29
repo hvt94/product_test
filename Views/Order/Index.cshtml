@@ -1,0 +1,91 @@
+﻿@model IEnumerable<ViettelIDC.ATMExample.Website.Models.OrderDetail>
+
+@{
+    ViewData["Title"] = "Danh sách Đơn hàng";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    var stt = 0;
+}
+
+<h5>Danh sách đơn hàng</h5>
+
+<p>
+    <a asp-action="Create">Thêm mới</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>
+                @Html.DisplayNameFor(model => model.Code)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count() > 0)
+        {
+            foreach (var item in Model) { stt++;
+        <tr>
+            <td>@stt</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Code)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @if (item.Status == 1)
+                {
+                    <span>Hoạt động</span>
+                }else if (item.Status == 0)
+                {
+                    <span>Đã xóa</span>
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Sửa", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Chi tiết", "Detail", new { id = item.Id }) |
+                <a href="javascript:void(0);" data-href="/Order/Delete/@item.Id" class="quickDelete" >Xóa</a>
+            </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <span>Không có dữ liệu</span>
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function()
+    {
+        $(".quickDelete").click(function()
+        {
+            var url = $(this).attr('data-href');
+            $.ajax({
+                type:'POST',
+                url:url,
+                success: function(data)
+                {
+                    if (data)
+                    {
+                        alert("Xóa thành công");
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+    });
+</script>

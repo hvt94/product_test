@@ -1,0 +1,53 @@
+﻿@model ViettelIDC.ATMExample.Website.Models.Order
+
+@{
+    ViewData["Title"] = "Sửa đơn hàng";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var lstProduct = (List<Product>)ViewData["lstProduct"] ?? new List<Product>();
+    var lstProductSelect = lstProduct.Select(s => new SelectListItem
+                    {
+                        Value = s.Id.ToString(),
+                        Text = s.Name,
+                        Selected = s.Id == Model.ProductId
+                    }).ToList();
+}
+
+<h5>Sửa đơn hàng</h5>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.HiddenFor(x => x.Id)
+            @Html.HiddenFor(x => x.Status)
+            @*<div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductId" class="control-label"></label>
+                <select asp-for="ProductId" asp-items="lstProductSelect" class="form-control"></select>
+                <span asp-validation-for="ProductId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Quay lại</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
